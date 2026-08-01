@@ -24,6 +24,13 @@ class MainActivity : BridgeActivity() {
             val prefs = getSharedPreferences("SiskyPrefs", MODE_PRIVATE)
             return prefs.getString("subdomain", "") ?: ""
         }
+
+        @JavascriptInterface
+        fun navigateTo(url: String) {
+            runOnUiThread {
+                bridge.webView.loadUrl(url)
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
