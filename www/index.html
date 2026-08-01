@@ -199,30 +199,28 @@
             setLoading(true);
 
             try {
-                var controller = new AbortController();
-                var timeout = setTimeout(function () { controller.abort(); }, 15000);
+                var url = 'https://' + subdomain + '.sisky.com.br/api/tenant/resolve';
 
-                var response = await fetch('https://' + subdomain + '.sisky.com.br/api/tenant/resolve', {
-                    signal: controller.signal,
+                // Usa CapacitorHttp em vez do fetch nativo
+                var result = await window.Capacitor.Plugins.CapacitorHttp.request({
                     method: 'GET',
+                    url: url,
                     headers: {
                         'X-Tenant-Subdomain': subdomain
                     }
                 });
 
-                clearTimeout(timeout);
-
-                if (response.ok) {
+                if (result.status === 200) {
                     localStorage.setItem('sisky_subdomain', subdomain);
                     if (window.Android) {
                         window.Android.setSubdomain(subdomain);
                     } else {
                         window.location.href = 'https://' + subdomain + '.sisky.com.br';
                     }
-                } else if (response.status === 404) {
+                } else if (result.status === 404) {
                     showError('Subdomínio não encontrado. Verifique e tente novamente.');
                 } else {
-                    showError('Erro ' + response.status + ' ao conectar.');
+                    showError('Erro ' + result.status + ' ao conectar.');
                 }
             } catch (e) {
                 showError('Erro: ' + e.message);
@@ -230,7 +228,6 @@
                 setLoading(false);
             }
         }
-
         function showError(msg) {
             errorMsg.textContent = msg;
             inputGroup.classList.add('error');
