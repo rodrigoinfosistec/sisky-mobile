@@ -2,10 +2,10 @@ package com.sisky.app
 
 import android.os.Bundle
 import android.webkit.JavascriptInterface
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
 import com.getcapacitor.BridgeActivity
 import com.getcapacitor.BridgeWebViewClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
 
 class MainActivity : BridgeActivity() {
 
@@ -38,20 +38,19 @@ class MainActivity : BridgeActivity() {
 
         bridge.webView.addJavascriptInterface(AndroidBridge(), "Android")
 
-        // Sobrescreve o WebViewClient do Capacitor
         bridge.webView.webViewClient = object : BridgeWebViewClient(bridge) {
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
                 val url = request?.url?.toString() ?: return false
-                // Carrega tudo dentro do WebView
-                view?.loadUrl(url)
+                if (url.contains("sisky.com.br") || url.contains("localhost")) {
+                    return false
+                }
                 return true
             }
         }
 
-        // Verifica subdomínio salvo
         val prefs = getSharedPreferences("SiskyPrefs", MODE_PRIVATE)
         val subdomain = prefs.getString("subdomain", null)
         if (!subdomain.isNullOrEmpty()) {
