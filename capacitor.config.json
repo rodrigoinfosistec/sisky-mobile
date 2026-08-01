@@ -1,15 +1,5 @@
 {
   "appId": "com.sisky.app",
   "appName": "Sisky",
-  "webDir": "www",
-  "android": {
-    "allowMixedContent": true,
-    "captureInput": true,
-    "webContentsDebuggingEnabled": true
-  },
-  "plugins": {
-    "CapacitorHttp": {
-      "enabled": true
-    }
-  }
+  "webDir": "www"
 }
