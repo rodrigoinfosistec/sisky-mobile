@@ -152,6 +152,13 @@
     </div>
 
     <script>
+        // Esconde o splash screen quando a página carregar
+        window.addEventListener('load', function () {
+            if (window.Capacitor && window.Capacitor.Plugins.SplashScreen) {
+                window.Capacitor.Plugins.SplashScreen.hide();
+            }
+        });
+
         var input = document.getElementById('subdomain');
         var btn = document.getElementById('btn');
         var errorMsg = document.getElementById('errorMsg');
