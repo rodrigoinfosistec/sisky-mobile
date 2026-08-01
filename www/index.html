@@ -200,10 +200,14 @@
 
             try {
                 var controller = new AbortController();
-                var timeout = setTimeout(function () { controller.abort(); }, 8000);
+                var timeout = setTimeout(function () { controller.abort(); }, 15000);
 
                 var response = await fetch('https://' + subdomain + '.sisky.com.br/api/tenant/resolve', {
-                    signal: controller.signal
+                    signal: controller.signal,
+                    method: 'GET',
+                    headers: {
+                        'X-Tenant-Subdomain': subdomain
+                    }
                 });
 
                 clearTimeout(timeout);
@@ -218,14 +222,10 @@
                 } else if (response.status === 404) {
                     showError('Subdomínio não encontrado. Verifique e tente novamente.');
                 } else {
-                    showError('Erro ao conectar. Tente novamente.');
+                    showError('Erro ' + response.status + ' ao conectar.');
                 }
             } catch (e) {
-                if (e.name === 'AbortError') {
-                    showError('Tempo de conexão esgotado. Verifique sua internet.');
-                } else {
-                    showError('Não foi possível conectar ao servidor.');
-                }
+                showError('Erro: ' + e.message);
             } finally {
                 setLoading(false);
             }
