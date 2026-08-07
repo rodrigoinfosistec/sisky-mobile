@@ -6,3 +6,5 @@ android/.idea/
 android/local.properties
 *.apk
 *.aab
+sisky-release.jks
+sisky-release-base64.txt
